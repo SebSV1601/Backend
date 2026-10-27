@@ -20,38 +20,36 @@ const connection = mysql.createConnection({
     database: process.env.DBDATABASE
 });
 
-app.get("/hello", () => {
-    console.log("Hello");
-});
-
-app.get('/',(req, res) => {
-    connection.query('SELECT name FROM pokemon',(error,results) => {
-        res.send(results);
+// Liste over alle pokemon med alle deres stats
+app.get('/pokemon', (req, res) =>{
+    connection.query('select * from pokemon', (error, result) => {
+        res.send(result);
     });
 });
 
+// se alle pokemon af en bestemt type man
+app.get('/pokemon_type', (req, res) => {
+    const type = req.query.type
 
-//Unsafe way - will allow SQL injections
-app.get('/single',(req, res)=>{
-    const requestParameter = req.query.name; // "Charizard"
-
-    connection.query('SELECT * FROM pokemon WHERE name ="' + requestParameter + "\"",(error,results) => {
-        res.send(results);
-    });
+    connection.query('select * from pokemon where primary_type = ?',
+        [type],
+        (error, result) => {
+            res.send(result)
+        });
 });
 
-//Safe way - will not allow SQL injections
-app.get('/single-safe', (req, res) => {
-    const requestParameter = req.query.name;
+// søge efter pokemon navn
+app.get('/pokemon_name',(req, res) => {
+    const pokemonName = req.query.name
 
-    connection.query(
-        'SELECT * FROM pokemon WHERE name = ?',
-        [requestParameter],
-        (error, results) => {
-            res.send(results);
-        }
-    );
+    connection.query('select * from pokemon where name = ?',
+        [pokemonName],
+        (error, result)=> {
+            res.send(result)
+        });
 });
+
+
 
 app.listen(port, () =>{
     console.log(`Application is now running on port ${port}`);
