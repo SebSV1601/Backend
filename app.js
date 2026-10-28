@@ -89,6 +89,22 @@ app.post("/trainer/new/", (req, res) => {
             });
 });
 
+// Tilføje en Pokémon til en trainer.
+app.post("/pokemon/trainer/new/", (req, res) => {
+    const pokedex_number = req.body.pokedex_number
+    const trainer_id = req.body.trainer_id
+
+connection.query(`insert into trainer_pokemon (pokedex_number, trainer_id) VALUES (?, ?)`,
+                [pokedex_number, trainer_id],
+                (error, result) => {
+                if (error) {
+                    console.error(error);
+                return res.status(500).send ("Pokemon could not be added to a new trainer");
+                }
+                res.status(201).send("Pokemon was added to a new trainer");
+
+    });
+});
 app.listen(port, () =>{
     console.log(`Application is now running on port ${port}`);
 });
