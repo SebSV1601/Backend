@@ -130,6 +130,21 @@ app.get("/moods/pokemon", (req, res) => {
 
     });
 });
+
+// Hvilke trainers har flest Pokémon?
+
+app.get("/dashboard/trainerHighestPokemon", (req, res) => {
+    connection.query(`select trainer.trainer_name, COUNT(*) as total 
+                      from trainer
+                      inner join trainer_pokemon
+                      on trainer.trainer_id = trainer_pokemon.trainer_id
+                      GROUP BY trainer.trainer_id, trainer.trainer_name
+                      order by total DESC
+                      limit 1`, (error, result) => {
+                       res.send(result)
+    });
+});
+
 // Hvilken Pokémon-type har den højeste gennemsnitlige attack?
 
 app.get("/dashboard/HighestAverageAtttack", (req, res) => {
@@ -161,5 +176,3 @@ app.get("/dashboard/differentTypes", (req, res) => {
 app.listen(port, () =>{
     console.log(`Application is now running on port ${port}`);
 });
-
-
