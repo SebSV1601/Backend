@@ -4,6 +4,7 @@ const express = require("express");
 const mysql = require("mysql2");
 //npm install cors --save
 const cors = require("cors");
+const {response} = require("express");
 
 const app = express();
 
@@ -102,6 +103,26 @@ connection.query(`insert into trainer_pokemon (pokedex_number, trainer_id) VALUE
                 return res.status(500).send ("Pokemon could not be added to a new trainer");
                 }
                 res.status(201).send("Pokemon was added to a new trainer");
+
+    });
+});
+
+// Alle moods
+app.get("/moods", (req, res) => {
+    connection.query(`select * from moods`,
+        (error, result) => {
+        res.send(result)
+        });
+});
+
+// pokemon med deres mood
+app.get("/moods/pokemon", (req, res) => {
+    connection.query(`select pokedex_number, name, mood_name 
+                      from pokemon
+                      inner join moods on pokemon.mood_id = moods.mood_id
+                      `,
+                        (error, result) => {
+                        res.send(result)
 
     });
 });
