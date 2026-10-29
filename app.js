@@ -1,4 +1,4 @@
-
+require("dotenv").config();
 
 
 //npm install express --save
@@ -22,7 +22,8 @@ const connection = mysql.createConnection({
     host: process.env.DBHOST,
     user: process.env.DBUSER,
     password: process.env.DBPASSWORD,
-    database: process.env.DBDATABASE
+    database: process.env.DBDATABASE,
+    port: Number(process.env.DBPORT)
 
 });
 
