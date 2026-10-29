@@ -1,3 +1,6 @@
+
+
+
 //npm install express --save
 const express = require("express");
 //npm install mysql2 --save
@@ -20,6 +23,7 @@ const connection = mysql.createConnection({
     user: process.env.DBUSER,
     password: process.env.DBPASSWORD,
     database: process.env.DBDATABASE
+
 });
 
 // Liste over alle pokemon med alle deres stats
@@ -126,6 +130,36 @@ app.get("/moods/pokemon", (req, res) => {
 
     });
 });
+// Hvilken Pokémon-type har den højeste gennemsnitlige attack?
+
+app.get("/dashboard/HighestAverageAtttack", (req, res) => {
+    connection.query(`select primary_type, AVG(attack)
+                      from pokemon
+                      GROUP BY primary_type
+                      ORDER BY AVG(attack) desc
+                          LIMIT 1;`,
+        (error, result) => {
+        res.send(result)
+    });
+});
+
+// Hvordan er Pokémon fordelt på de forskellige typer?
+
+app.get("/dashboard/differentTypes", (req, res) => {
+    connection.query(`select primary_type, COUNT(*) as number_of_primary_types
+                      from pokemon
+                      group by primary_type
+                      order by COUNT(*)
+                          DESC;`,
+        (error, result) => {
+            res.send(result)
+        });
+});
+
+
+
 app.listen(port, () =>{
     console.log(`Application is now running on port ${port}`);
 });
+
+
