@@ -31,7 +31,7 @@ const connection = mysql.createConnection({
 app.get('/pokemon', (req, res) =>{
     connection.query('select * from pokemon',
         (error, result) => {
-        res.send(result);
+        res.json(result);
     });
 });
 
@@ -42,7 +42,7 @@ app.get('/pokemon/type', (req, res) => {
     connection.query('select * from pokemon where primary_type = ?',
         [type],
         (error, result) => {
-            res.send(result)
+            res.json(result)
         });
 });
 
