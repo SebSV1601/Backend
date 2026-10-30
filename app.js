@@ -37,9 +37,9 @@ app.get('/pokemon', (req, res) =>{
 
 // se alle pokemon af en bestemt type man
 app.get('/pokemon/type', (req, res) => {
-    const type = req.query.type
+    const type = req.query.primary_type.split(",")
 
-    connection.query('select * from pokemon where primary_type = ?',
+    connection.query('select * from pokemon where primary_type in (?)',
         [type],
         (error, result) => {
             res.json(result)
