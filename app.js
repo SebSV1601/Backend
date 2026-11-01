@@ -31,18 +31,18 @@ const connection = mysql.createConnection({
 app.get('/pokemon', (req, res) =>{
     connection.query('select * from pokemon',
         (error, result) => {
-        res.send(result);
+        res.json(result);
     });
 });
 
 // se alle pokemon af en bestemt type man
 app.get('/pokemon/type', (req, res) => {
-    const type = req.query.type
+    const type = req.query.primary_type.split(",")
 
-    connection.query('select * from pokemon where primary_type = ?',
+    connection.query('select * from pokemon where primary_type in (?)',
         [type],
         (error, result) => {
-            res.send(result)
+            res.json(result)
         });
 });
 
