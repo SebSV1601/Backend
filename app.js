@@ -91,7 +91,10 @@ app.post("/trainer/new/", (req, res) => {
                     console.error(error);
                     return res.status(500).send("Trainer could not be generated");
                 }
-                res.status(201).send(" Trainer was created");
+                res.status(201).json({
+                    trainer_id: results.insertId,
+                    message: "Trainer was created"
+                });
             });
 });
 
